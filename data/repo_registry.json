@@ -1,0 +1,17 @@
+{
+  "https://github.com/fastapi/fastapi.git": {
+    "repo_url": "https://github.com/fastapi/fastapi.git",
+    "local_repo_path": "/Users/anishbellamkonda/codegraph_ai/backend/repo_cache/fastapi_73c7233f2c",
+    "indexed": true
+  },
+  "https://github.com/anishbellamkonda01/releaseguardian.git": {
+    "repo_url": "https://github.com/anishbellamkonda01/releaseguardian.git",
+    "local_repo_path": "/Users/anishbellamkonda/codegraph_ai/backend/repo_cache/releaseguardian_436151d0a6",
+    "indexed": false
+  },
+  "https://github.com/AnishBellamkonda/Amazon-Reviews-using-Sentiment-Analysis.git": {
+    "repo_url": "https://github.com/AnishBellamkonda/Amazon-Reviews-using-Sentiment-Analysis.git",
+    "local_repo_path": "/Users/anishbellamkonda/codegraph_ai/backend/repo_cache/Amazon-Reviews-using-Sentiment-Analysis_06a7642532",
+    "indexed": false
+  }
+}
