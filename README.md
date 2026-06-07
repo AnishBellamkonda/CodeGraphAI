@@ -1,77 +1,285 @@
-# CodeGraph AI - Starter Backend
+# 🚀 CodeGraph AI
 
-This is the first backend for **CodeGraph AI**, an AI-powered codebase understanding engine.
+**AI-powered Repository Intelligence Platform**
 
-## What this version does
-- Starts a FastAPI server
-- Accepts a local repository path
-- Scans text-based source files
-- Ignores noisy folders like `node_modules`, `.git`, `dist`, `build`, and `venv`
-- Returns:
-  - detected languages
-  - top-level folders/files
-  - basic framework guesses
-  - previews of important files
+CodeGraph AI helps developers, engineering teams, and technical leaders understand large codebases faster through AI-driven analysis, architecture insights, repository health checks, and interactive code exploration.
 
-## Project structure
+Instead of manually navigating thousands of files, CodeGraph AI transforms repositories into searchable, explainable, and actionable engineering knowledge.
+
+---
+
+## ✨ Features
+
+### 🔍 Repository Analysis
+
+* Analyze local repositories
+* Analyze GitHub repositories
+* Repository summarization
+* Intelligent codebase indexing
+* Repository structure exploration
+
+### 🤖 AI Engineering Copilot
+
+* Ask questions about your codebase
+* Understand architecture and workflows
+* Explain implementation details
+* Discover entry points and dependencies
+* Accelerate developer onboarding
+
+### 🏗️ Architecture Intelligence
+
+* Architecture mapping
+* System design insights
+* Dependency analysis
+* Architecture comparison
+* Engineering documentation generation
+
+### 📊 Engineering Health & Quality
+
+* Deployment readiness analysis
+* Test coverage heuristics
+* Dependency insights
+* Repository health metrics
+* Technical risk identification
+
+### 🔄 Repository Comparison
+
+* Compare local repositories
+* Compare GitHub repositories
+* Architecture diff analysis
+* Structural change detection
+
+### 🛠️ GitHub Intelligence
+
+* Pull Request Dashboard
+* Contributor Analysis
+* Issue Dashboard
+* Release Readiness Insights
+* Repository Activity Tracking
+
+### 👥 Team & Operations
+
+* Watch Mode
+* Team Dashboard
+* Historical Analysis
+* Portfolio Reports
+* Repository Monitoring
+
+---
+
+## 🏛️ High-Level Architecture
+
 ```text
-backend/
-  app/
-    main.py
-    repo_reader.py
-  requirements.txt
-  .env.example
-  README.md
+                    ┌───────────────────┐
+                    │      Frontend     │
+                    │  HTML / CSS / JS  │
+                    └─────────┬─────────┘
+                              │
+                              ▼
+                    ┌───────────────────┐
+                    │      FastAPI      │
+                    │    Backend API    │
+                    └─────────┬─────────┘
+                              │
+        ┌─────────────────────┼─────────────────────┐
+        ▼                     ▼                     ▼
+
+ ┌─────────────┐      ┌─────────────┐      ┌─────────────┐
+ │ Repo Parser │      │ GitHub APIs │      │ AI Services │
+ └─────────────┘      └─────────────┘      └─────────────┘
+        │                     │                     │
+        └─────────────┬───────┴─────────────┬───────┘
+                      ▼                     ▼
+
+              ┌─────────────────────┐
+              │   ChromaDB (RAG)    │
+              │  Repository Memory  │
+              └─────────────────────┘
 ```
 
-## Setup
-### 1. Create and activate a virtual environment
+---
+
+## 🧰 Technology Stack
+
+### Backend
+
+* Python
+* FastAPI
+* Uvicorn
+
+### AI & Search
+
+* ChromaDB
+* Retrieval-Augmented Generation (RAG)
+
+### Repository Intelligence
+
+* GitHub REST APIs
+* Repository Parsing
+* Architecture Analysis
+
+### Frontend
+
+* HTML
+* CSS
+* JavaScript
+
+### Storage
+
+* ChromaDB
+* Local Repository Metadata
+
+---
+
+## 📸 Core Workflows
+
+### Local Repository Analysis
+
+```text
+Repository Path
+      │
+      ▼
+Analyze Repository
+      │
+      ▼
+Index + Summarize
+      │
+      ▼
+Architecture Insights
+      │
+      ▼
+AI Copilot Q&A
+```
+
+### GitHub Repository Analysis
+
+```text
+GitHub URL
+      │
+      ▼
+Repository Fetch
+      │
+      ▼
+Index Repository
+      │
+      ▼
+PR / Issues / Contributors
+      │
+      ▼
+Engineering Insights
+```
+
+---
+
+## 🚀 Getting Started
+
+### Clone Repository
+
 ```bash
-cd backend
+git clone https://github.com/AnishBellamkonda/CodeGraphAI.git
+cd CodeGraphAI
+```
+
+### Create Virtual Environment
+
+```bash
 python3 -m venv .venv
 source .venv/bin/activate
 ```
 
-### 2. Install dependencies
+### Install Dependencies
+
 ```bash
 pip install -r requirements.txt
 ```
 
-### 3. Run the API
+### Run Application
+
 ```bash
-uvicorn app.main:app --reload
+python -m uvicorn app.main:app --reload
 ```
 
-The server will start on:
+Application will be available at:
+
 ```text
 http://127.0.0.1:8000
 ```
 
-## Test it
-Open the Swagger UI:
+---
+
+## 📁 Project Structure
+
 ```text
-http://127.0.0.1:8000/docs
+CodeGraphAI
+│
+├── app
+│   ├── services
+│   ├── static
+│   ├── templates
+│   ├── models
+│   └── main.py
+│
+├── chroma_db
+├── requirements.txt
+├── README.md
+└── .gitignore
 ```
 
-Use the `/analyze` endpoint with a JSON body like:
-```json
-{
-  "repo_path": "/absolute/path/to/your/repo"
-}
-```
+---
 
-Example:
-```json
-{
-  "repo_path": "/Users/anish/Desktop/sample-project"
-}
-```
+## 🎯 Use Cases
 
-## What to build next
-1. Add LLM summary generation
-2. Add chunking + embeddings
-3. Add ChromaDB for RAG
-4. Add `/ask` endpoint for codebase Q&A
-5. Add frontend UI in React
-```
-# CodeGraphAI
+### Developers
+
+* Understand unfamiliar repositories
+* Accelerate onboarding
+* Explore architecture faster
+
+### Engineering Managers
+
+* Evaluate repository health
+* Review engineering quality
+* Identify technical debt
+
+### Technical Leads
+
+* Analyze architecture decisions
+* Compare implementations
+* Assess deployment readiness
+
+### Open Source Contributors
+
+* Understand project structure
+* Find relevant code paths
+* Discover ownership patterns
+
+---
+
+## 🔮 Future Roadmap
+
+* Repository Health Score
+* Architecture Graph Visualization
+* AI-Generated System Design Diagrams
+* Semantic Code Search
+* Multi-Repository Workspaces
+* Team Collaboration Features
+* Automated Documentation Generation
+* Engineering Trend Analytics
+
+---
+
+## 👨‍💻 Author
+
+**Anish Bellamkonda**
+
+Software Engineer focused on distributed systems, developer tooling, AI-powered engineering workflows, and scalable backend platforms.
+
+GitHub: https://github.com/AnishBellamkonda
+
+---
+
+## ⭐ Support
+
+If you find this project useful, consider giving it a star on GitHub.
+
+It helps the project reach more developers and engineering teams.
