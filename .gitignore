@@ -4,3 +4,15 @@ __pycache__/
 .env
 .venv/
 venv/
+
+# macOS
+.DS_Store
+**/.DS_Store
+
+# UI backups
+ui_backup_*/
+ui_loading_backup_*/
+
+# Local scripts
+apply_modern_ui.sh
+fix_dashboard_loading.sh

@@ -3,453 +3,732 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <meta name="theme-color" content="#070a12" />
   <title>CodeGraph AI</title>
-
-  <link
-    rel="stylesheet"
-    href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.9.0/styles/github-dark.min.css"
-  />
-  <link rel="stylesheet" href="/static/ui.css?v=500" />
+  <link rel="icon" href="/static/favicon.svg" type="image/svg+xml">
+  <link rel="stylesheet" href="/static/ui.css?v=1001" />
 </head>
 <body>
-  <div class="product-shell">
-    <header class="app-topbar">
-      <button class="brand-button" data-open-page="overview">
-        <span class="brand-mark">CG</span>
-        <span class="brand-copy">
-          <span class="brand-title">CodeGraph AI</span>
-          <span class="brand-subtitle">Engineering Intelligence Platform</span>
-        </span>
-      </button>
+  <div class="app-shell">
+    <aside class="sidebar" id="appSidebar" aria-label="Primary navigation">
+      <div class="sidebar-header">
+        <button class="brand" type="button" data-open-page="overview" aria-label="Open dashboard">
+          <span class="brand-mark" aria-hidden="true">
+            <i data-lucide="git-branch"></i>
+          </span>
+          <span class="brand-copy">
+            <strong>CodeGraph AI</strong>
+            <small>Repository intelligence</small>
+          </span>
+        </button>
 
-      <nav class="topbar-nav">
-        <button class="nav-link active" data-page-link="overview">Overview</button>
-        <button class="nav-link" data-page-link="local">Local</button>
-        <button class="nav-link" data-page-link="github">GitHub</button>
-        <button class="nav-link" data-page-link="compare">Compare</button>
-        <button class="nav-link" data-page-link="ops">Ops</button>
-        <button class="nav-link" data-page-link="workspace">Workspace</button>
+        <button class="icon-button sidebar-collapse" id="sidebarCollapse" type="button" aria-label="Collapse sidebar">
+          <i data-lucide="panel-left-close"></i>
+        </button>
+      </div>
+
+      <nav class="sidebar-nav">
+        <div class="nav-group-label">Workspace</div>
+
+        <button class="nav-item active" type="button" data-page-link="overview">
+          <i data-lucide="layout-dashboard"></i>
+          <span>Dashboard</span>
+        </button>
+
+        <button class="nav-item" type="button" data-page-link="local">
+          <i data-lucide="folder-code"></i>
+          <span>Local repositories</span>
+        </button>
+
+        <button class="nav-item" type="button" data-page-link="github">
+          <i data-lucide="github"></i>
+          <span>GitHub</span>
+        </button>
+
+        <button class="nav-item" type="button" data-page-link="compare">
+          <i data-lucide="git-compare-arrows"></i>
+          <span>Compare</span>
+        </button>
+
+        <button class="nav-item" type="button" data-page-link="workspace">
+          <i data-lucide="sparkles"></i>
+          <span>AI workspace</span>
+        </button>
+
+        <div class="nav-group-label nav-group-spaced">Operations</div>
+
+        <button class="nav-item" type="button" data-page-link="ops">
+          <i data-lucide="activity"></i>
+          <span>Monitoring</span>
+        </button>
       </nav>
 
-      <div class="topbar-meta">
-        <span class="meta-pill">Product UI</span>
+      <div class="sidebar-footer">
+        <div class="connection-card">
+          <span class="connection-dot"></span>
+          <span class="connection-copy">
+            <strong>Local server</strong>
+            <small>Connected on port 8000</small>
+          </span>
+        </div>
       </div>
-    </header>
+    </aside>
 
-    <section class="global-prompt-bar">
-      <div class="prompt-copy">
-        <div class="section-kicker">Global prompt</div>
-        <h2>Ask once. Use across every workspace.</h2>
-      </div>
-      <div class="prompt-input-wrap">
-        <textarea
-          id="question"
-          rows="3"
-          placeholder="Ask anything about the repository... for example: where does request flow start?"
-        ></textarea>
-      </div>
-    </section>
+    <div class="mobile-backdrop" id="mobileBackdrop"></div>
 
-    <main class="page-stack">
-      <section class="page active" data-page="overview">
-        <section class="hero-surface">
-          <div class="hero-left">
-            <div class="hero-kicker">AI-powered repository understanding</div>
-            <h1>Understand architecture, compare systems, and surface engineering risk from one premium workspace.</h1>
-            <p>
-              CodeGraph AI helps engineering teams analyze repositories, inspect architecture,
-              ask copilot questions, compare systems, generate reports, and track testing and deployment readiness
-              across multiple projects.
-            </p>
+    <div class="app-frame">
+      <header class="topbar">
+        <div class="topbar-left">
+          <button class="icon-button mobile-menu" id="mobileMenu" type="button" aria-label="Open menu">
+            <i data-lucide="menu"></i>
+          </button>
 
-            <div class="hero-actions">
-              <button class="cta-primary" data-open-page="local">Open Local Workspace</button>
-              <button class="cta-secondary" data-open-page="github">Open GitHub Workspace</button>
-              <button class="cta-secondary" data-open-page="workspace">Open Results Workspace</button>
-            </div>
+          <div class="page-identity">
+            <span class="page-eyebrow">CodeGraph AI</span>
+            <strong id="currentPageTitle">Dashboard</strong>
+          </div>
+        </div>
 
-            <div class="hero-tags">
-              <span>Architecture maps</span>
-              <span>Engineering copilot</span>
-              <span>Repo compare</span>
-              <span>Issue insights</span>
-              <span>Deployment readiness</span>
-            </div>
+        <div class="topbar-actions">
+          <button class="shortcut-button" id="focusPromptButton" type="button">
+            <i data-lucide="search"></i>
+            <span>Ask your codebase</span>
+            <kbd>⌘ K</kbd>
+          </button>
+
+          <button class="icon-button" type="button" data-open-page="ops" aria-label="Open monitoring">
+            <i data-lucide="bell"></i>
+          </button>
+        </div>
+      </header>
+
+      <main class="app-content">
+        <section class="command-dock reveal" id="commandDock">
+          <div class="command-icon" aria-hidden="true">
+            <i data-lucide="wand-sparkles"></i>
           </div>
 
-          <div class="hero-right">
-            <div class="hero-stat">
-              <div class="hero-stat-label">Workspace model</div>
-              <div class="hero-stat-value">Local + GitHub</div>
-            </div>
-            <div class="hero-stat">
-              <div class="hero-stat-label">Best for</div>
-              <div class="hero-stat-value">Onboarding, reviews, demos</div>
-            </div>
-            <div class="hero-stat">
-              <div class="hero-stat-label">Style goal</div>
-              <div class="hero-stat-value">Product-first experience</div>
-            </div>
+          <div class="command-body">
+            <label for="question">Global AI prompt</label>
+            <textarea
+              id="question"
+              rows="2"
+              placeholder="Ask about architecture, request flow, dependencies, ownership, or implementation details..."
+            ></textarea>
+          </div>
+
+          <div class="command-actions">
+            <button class="button button-secondary" type="button" onclick="askLocal()">
+              <i data-lucide="laptop"></i>
+              Ask local
+            </button>
+            <button class="button button-primary" type="button" onclick="askGithub()">
+              <i data-lucide="github"></i>
+              Ask GitHub
+            </button>
           </div>
         </section>
 
-        <section class="overview-grid">
-          <article class="overview-card">
-            <div class="card-mark">LC</div>
-            <h3>Local engineering workspace</h3>
-            <p>Analyze repositories on disk, browse source, inspect architecture, and generate reports.</p>
-            <button class="ghost-link" data-open-page="local">Open local →</button>
-          </article>
+        <section class="page active" data-page="overview">
+          <section class="dashboard-hero reveal">
+            <div class="hero-content">
+              <div class="eyebrow-chip">
+                <span class="status-dot"></span>
+                AI-powered engineering intelligence
+              </div>
 
-          <article class="overview-card">
-            <div class="card-mark">GH</div>
-            <h3>GitHub intelligence</h3>
-            <p>Clone repositories into your workspace and inspect PRs, issues, ownership, and repo health.</p>
-            <button class="ghost-link" data-open-page="github">Open GitHub →</button>
-          </article>
+              <h1>Understand any codebase without getting lost in it.</h1>
+              <p>
+                Analyze local and GitHub repositories, map architecture, compare systems,
+                inspect engineering health, and ask grounded questions across your source code.
+              </p>
 
-          <article class="overview-card">
-            <div class="card-mark">CP</div>
-            <h3>Structured comparison</h3>
-            <p>Compare repositories side by side and diff architectural structure across system layers.</p>
-            <button class="ghost-link" data-open-page="compare">Open compare →</button>
-          </article>
+              <div class="hero-actions">
+                <button class="button button-primary button-large" type="button" data-open-page="local">
+                  <i data-lucide="folder-search"></i>
+                  Analyze a repository
+                </button>
+                <button class="button button-secondary button-large" type="button" data-open-page="workspace">
+                  <i data-lucide="messages-square"></i>
+                  Open AI workspace
+                </button>
+              </div>
+            </div>
 
-          <article class="overview-card">
-            <div class="card-mark">OP</div>
-            <h3>Ops and team visibility</h3>
-            <p>Create watch rules, inspect workspace history, and view health across saved repos.</p>
-            <button class="ghost-link" data-open-page="ops">Open ops →</button>
-          </article>
+            <div class="hero-visual" aria-hidden="true">
+              <div class="visual-orbit orbit-one"></div>
+              <div class="visual-orbit orbit-two"></div>
+              <div class="visual-core">
+                <i data-lucide="network"></i>
+              </div>
+              <div class="visual-node node-one"><i data-lucide="code-2"></i></div>
+              <div class="visual-node node-two"><i data-lucide="database"></i></div>
+              <div class="visual-node node-three"><i data-lucide="git-pull-request"></i></div>
+            </div>
+          </section>
+
+          <section class="metrics-grid reveal" aria-label="Workspace metrics">
+            <article class="metric-card">
+              <div class="metric-icon metric-blue"><i data-lucide="folder-git-2"></i></div>
+              <div class="metric-copy">
+                <span>Saved repositories</span>
+                <strong id="dashboardRepoCount">—</strong>
+                <small>Available in this workspace</small>
+              </div>
+            </article>
+
+            <article class="metric-card">
+              <div class="metric-icon metric-violet"><i data-lucide="history"></i></div>
+              <div class="metric-copy">
+                <span>Analysis events</span>
+                <strong id="dashboardHistoryCount">—</strong>
+                <small>Recent workspace activity</small>
+              </div>
+            </article>
+
+            <article class="metric-card">
+              <div class="metric-icon metric-amber"><i data-lucide="radar"></i></div>
+              <div class="metric-copy">
+                <span>Active watches</span>
+                <strong id="dashboardWatchCount">—</strong>
+                <small>Engineering thresholds tracked</small>
+              </div>
+            </article>
+
+            <article class="metric-card">
+              <div class="metric-icon metric-green"><i data-lucide="server"></i></div>
+              <div class="metric-copy">
+                <span>Backend status</span>
+                <strong>Online</strong>
+                <small>FastAPI connected locally</small>
+              </div>
+            </article>
+          </section>
+
+          <section class="section-block reveal">
+            <div class="section-heading">
+              <div>
+                <span class="section-kicker">Start a workflow</span>
+                <h2>Choose what you want to understand</h2>
+              </div>
+            </div>
+
+            <div class="workflow-grid">
+              <button class="workflow-card" type="button" data-open-page="local">
+                <span class="workflow-icon"><i data-lucide="scan-search"></i></span>
+                <span class="workflow-copy">
+                  <strong>Analyze local code</strong>
+                  <small>Scan a repository on your machine and discover its structure.</small>
+                </span>
+                <i class="workflow-arrow" data-lucide="arrow-up-right"></i>
+              </button>
+
+              <button class="workflow-card" type="button" data-open-page="github">
+                <span class="workflow-icon"><i data-lucide="github"></i></span>
+                <span class="workflow-copy">
+                  <strong>Inspect GitHub</strong>
+                  <small>Explore code, pull requests, issues, contributors, and releases.</small>
+                </span>
+                <i class="workflow-arrow" data-lucide="arrow-up-right"></i>
+              </button>
+
+              <button class="workflow-card" type="button" data-open-page="compare">
+                <span class="workflow-icon"><i data-lucide="git-compare-arrows"></i></span>
+                <span class="workflow-copy">
+                  <strong>Compare systems</strong>
+                  <small>Find structural and architectural differences between repositories.</small>
+                </span>
+                <i class="workflow-arrow" data-lucide="arrow-up-right"></i>
+              </button>
+
+              <button class="workflow-card" type="button" data-open-page="workspace">
+                <span class="workflow-icon"><i data-lucide="bot"></i></span>
+                <span class="workflow-copy">
+                  <strong>Ask the copilot</strong>
+                  <small>Use retrieved repository context to answer engineering questions.</small>
+                </span>
+                <i class="workflow-arrow" data-lucide="arrow-up-right"></i>
+              </button>
+            </div>
+          </section>
+
+          <section class="dashboard-lower-grid reveal">
+            <article class="surface-card recent-card">
+              <div class="card-header">
+                <div>
+                  <span class="section-kicker">Workspace activity</span>
+                  <h3>Recent analysis</h3>
+                </div>
+                <button class="text-button" type="button" data-open-page="ops">View all</button>
+              </div>
+              <div class="recent-list" id="dashboardRecentActivity">
+                <div class="dashboard-empty">
+                  <i data-lucide="history"></i>
+                  <span>Your recent analysis activity will appear here.</span>
+                </div>
+              </div>
+            </article>
+
+            <article class="surface-card capability-card">
+              <div class="card-header">
+                <div>
+                  <span class="section-kicker">Platform coverage</span>
+                  <h3>What CodeGraph understands</h3>
+                </div>
+              </div>
+              <div class="capability-list">
+                <div><i data-lucide="route"></i><span>Routes and request flows</span></div>
+                <div><i data-lucide="boxes"></i><span>Modules and dependencies</span></div>
+                <div><i data-lucide="test-tube-2"></i><span>Testing signals and risk</span></div>
+                <div><i data-lucide="rocket"></i><span>Deployment readiness</span></div>
+                <div><i data-lucide="users"></i><span>Ownership and contribution</span></div>
+              </div>
+            </article>
+          </section>
         </section>
-      </section>
 
-      <section class="page" data-page="local">
-        <div class="page-header">
-          <div>
-            <div class="section-kicker">Local workspace</div>
-            <h2>Analyze repositories on your machine</h2>
-          </div>
-          <p class="page-helper">Run analysis, architecture views, onboarding, reports, and readiness checks on local codebases.</p>
-        </div>
+        <section class="page" data-page="local">
+          <header class="page-header reveal">
+            <div>
+              <span class="section-kicker">Local repositories</span>
+              <h1>Analyze code on your machine</h1>
+              <p>Scan, index, explain, and evaluate a local repository without sending its files to GitHub.</p>
+            </div>
+            <span class="page-badge"><i data-lucide="hard-drive"></i> Local source</span>
+          </header>
 
-        <div class="task-layout">
-          <div class="task-main">
-            <section class="product-panel">
-              <div class="panel-head">
+          <section class="input-surface reveal">
+            <div class="input-surface-header">
+              <div class="input-icon"><i data-lucide="folder-open"></i></div>
+              <div>
+                <h2>Select a repository</h2>
+                <p>Enter the absolute path to the repository you want to inspect.</p>
+              </div>
+            </div>
+            <label for="repoPath">Local repository path</label>
+            <input id="repoPath" type="text" placeholder="/Users/yourname/projects/repository" />
+          </section>
+
+          <section class="section-block reveal">
+            <div class="section-heading">
+              <div>
+                <span class="section-kicker">Core workflows</span>
+                <h2>Understand the repository</h2>
+              </div>
+            </div>
+
+            <div class="action-card-grid">
+              <button class="action-card" type="button" onclick="analyzeLocal()">
+                <span class="action-icon"><i data-lucide="scan-search"></i></span>
+                <strong>Analyze repository</strong>
+                <small>Detect languages, frameworks, important files, and structure.</small>
+              </button>
+
+              <button class="action-card" type="button" onclick="summarizeLocal()">
+                <span class="action-icon"><i data-lucide="file-text"></i></span>
+                <strong>Generate summary</strong>
+                <small>Create a concise AI explanation of the repository.</small>
+              </button>
+
+              <button class="action-card" type="button" onclick="indexLocal()">
+                <span class="action-icon"><i data-lucide="database-zap"></i></span>
+                <strong>Build semantic index</strong>
+                <small>Chunk and store repository context for RAG-powered search.</small>
+              </button>
+
+              <button class="action-card" type="button" onclick="askCopilotLocal()">
+                <span class="action-icon"><i data-lucide="bot"></i></span>
+                <strong>Engineering copilot</strong>
+                <small>Ask implementation, architecture, and debugging questions.</small>
+              </button>
+
+              <button class="action-card" type="button" onclick="loadLocalTree()">
+                <span class="action-icon"><i data-lucide="folder-tree"></i></span>
+                <strong>Browse source files</strong>
+                <small>Open the repository tree and inspect source code.</small>
+              </button>
+
+              <button class="action-card" type="button" onclick="loadLocalArchitectureMap()">
+                <span class="action-icon"><i data-lucide="network"></i></span>
+                <strong>Architecture map</strong>
+                <small>Identify entry points, services, models, routes, and data layers.</small>
+              </button>
+
+              <button class="action-card" type="button" onclick="loadLocalOnboardingGuide()">
+                <span class="action-icon"><i data-lucide="milestone"></i></span>
+                <strong>Onboarding guide</strong>
+                <small>Generate a practical learning path for new contributors.</small>
+              </button>
+
+              <button class="action-card" type="button" onclick="loadLocalSystemDesign()">
+                <span class="action-icon"><i data-lucide="blocks"></i></span>
+                <strong>System design</strong>
+                <small>Explain components, request flow, and architectural risks.</small>
+              </button>
+            </div>
+          </section>
+
+          <section class="section-block reveal">
+            <div class="section-heading">
+              <div>
+                <span class="section-kicker">Engineering health</span>
+                <h2>Evaluate quality and readiness</h2>
+              </div>
+            </div>
+
+            <div class="compact-action-grid">
+              <button class="compact-action" type="button" onclick="loadLocalDependencyInsights()">
+                <i data-lucide="package-search"></i><span><strong>Dependencies</strong><small>Packages and infrastructure signals</small></span>
+              </button>
+              <button class="compact-action" type="button" onclick="loadLocalTestCoverage()">
+                <i data-lucide="test-tube-2"></i><span><strong>Testing health</strong><small>Coverage heuristics and risky files</small></span>
+              </button>
+              <button class="compact-action" type="button" onclick="loadLocalDeploymentReadiness()">
+                <i data-lucide="rocket"></i><span><strong>Production readiness</strong><small>CI/CD, containers, config, and infra</small></span>
+              </button>
+              <button class="compact-action" type="button" onclick="exportLocalReport()">
+                <i data-lucide="file-down"></i><span><strong>Export report</strong><small>Save a Markdown engineering report</small></span>
+              </button>
+              <button class="compact-action" type="button" onclick="createLocalPortfolioShare()">
+                <i data-lucide="share-2"></i><span><strong>Portfolio share</strong><small>Create a polished HTML snapshot</small></span>
+              </button>
+              <button class="compact-action" type="button" onclick="askLocal()">
+                <i data-lucide="message-square-code"></i><span><strong>Ask with RAG</strong><small>Answer using indexed source context</small></span>
+              </button>
+            </div>
+          </section>
+        </section>
+
+        <section class="page" data-page="github">
+          <header class="page-header reveal">
+            <div>
+              <span class="section-kicker">GitHub intelligence</span>
+              <h1>Inspect a GitHub repository</h1>
+              <p>Clone and analyze repository code, collaboration, pull requests, issues, ownership, and release readiness.</p>
+            </div>
+            <span class="page-badge"><i data-lucide="github"></i> GitHub source</span>
+          </header>
+
+          <section class="source-grid reveal">
+            <article class="input-surface">
+              <div class="input-surface-header">
+                <div class="input-icon"><i data-lucide="bookmark"></i></div>
                 <div>
-                  <div class="panel-kicker">Repository target</div>
-                  <h3>Local repository input</h3>
+                  <h2>Saved repositories</h2>
+                  <p>Reuse a repository already cloned into your workspace.</p>
                 </div>
               </div>
-
-              <label for="repoPath">Repository path</label>
-              <input id="repoPath" type="text" placeholder="/Users/anishbellamkonda/codegraph_ai" />
-            </section>
-
-            <section class="product-panel">
-              <div class="panel-head">
-                <div>
-                  <div class="panel-kicker">Core actions</div>
-                  <h3>Analyze and inspect</h3>
-                </div>
-              </div>
-
-              <div class="action-grid">
-                <button onclick="analyzeLocal()">Analyze</button>
-                <button onclick="summarizeLocal()">Summarize</button>
-                <button onclick="indexLocal()">Index</button>
-                <button onclick="askLocal()">Ask Local</button>
-                <button onclick="askCopilotLocal()">Copilot Local</button>
-                <button onclick="loadLocalTree()">Load Files</button>
-                <button onclick="loadLocalArchitectureMap()">Architecture</button>
-                <button onclick="loadLocalOnboardingGuide()">Onboarding</button>
-              </div>
-            </section>
-          </div>
-
-          <aside class="task-side">
-            <section class="product-panel accent-panel">
-              <div class="panel-head">
-                <div>
-                  <div class="panel-kicker">Advanced outputs</div>
-                  <h3>Reports and deeper insights</h3>
-                </div>
-              </div>
-
-              <div class="action-grid compact">
-                <button onclick="exportLocalReport()">Export Report</button>
-                <button onclick="createLocalPortfolioShare()">Portfolio Share</button>
-                <button onclick="loadLocalDependencyInsights()">Dependencies</button>
-                <button onclick="loadLocalSystemDesign()">System Design</button>
-                <button onclick="loadLocalTestCoverage()">Test Heuristics</button>
-                <button onclick="loadLocalDeploymentReadiness()">Deployment</button>
-              </div>
-            </section>
-          </aside>
-        </div>
-      </section>
-
-      <section class="page" data-page="github">
-        <div class="page-header">
-          <div>
-            <div class="section-kicker">GitHub workspace</div>
-            <h2>Inspect repositories from GitHub</h2>
-          </div>
-          <p class="page-helper">Use saved repos, clone public repositories, and inspect health, ownership, issues, PRs, and structure.</p>
-        </div>
-
-        <div class="task-layout">
-          <div class="task-main">
-            <section class="product-panel">
-              <div class="panel-head">
-                <div>
-                  <div class="panel-kicker">Repository source</div>
-                  <h3>GitHub repository selection</h3>
-                </div>
-              </div>
-
-              <label for="savedRepos">Saved repositories</label>
-              <div class="inline-row">
+              <label for="savedRepos">Saved repository</label>
+              <div class="inline-input">
                 <select id="savedRepos"></select>
-                <button class="secondary" onclick="useSelectedRepo()">Use</button>
+                <button class="button button-secondary" type="button" onclick="useSelectedRepo()">Use</button>
               </div>
+            </article>
 
-              <label for="repoUrl">Repository URL</label>
-              <input id="repoUrl" type="text" placeholder="https://github.com/fastapi/fastapi" />
+            <article class="input-surface">
+              <div class="input-surface-header">
+                <div class="input-icon"><i data-lucide="link"></i></div>
+                <div>
+                  <h2>Repository URL</h2>
+                  <p>Enter a public GitHub repository to clone or refresh.</p>
+                </div>
+              </div>
+              <label for="repoUrl">GitHub repository URL</label>
+              <input id="repoUrl" type="url" placeholder="https://github.com/owner/repository" />
+              <div class="inline-helper-actions">
+                <button class="text-button" type="button" onclick="refreshSelectedRepo()"><i data-lucide="refresh-cw"></i> Force refresh clone</button>
+              </div>
+            </article>
+          </section>
+
+          <section class="section-block reveal">
+            <div class="section-heading">
+              <div>
+                <span class="section-kicker">Repository workflows</span>
+                <h2>Understand code and architecture</h2>
+              </div>
+            </div>
+
+            <div class="action-card-grid">
+              <button class="action-card" type="button" onclick="summarizeGithub()">
+                <span class="action-icon"><i data-lucide="file-text"></i></span>
+                <strong>Generate summary</strong>
+                <small>Explain the codebase, technology, and major modules.</small>
+              </button>
+              <button class="action-card" type="button" onclick="indexGithub()">
+                <span class="action-icon"><i data-lucide="database-zap"></i></span>
+                <strong>Build semantic index</strong>
+                <small>Prepare the repository for grounded AI questions.</small>
+              </button>
+              <button class="action-card" type="button" onclick="askCopilotGithub()">
+                <span class="action-icon"><i data-lucide="bot"></i></span>
+                <strong>Engineering copilot</strong>
+                <small>Ask code and system-design questions about the repository.</small>
+              </button>
+              <button class="action-card" type="button" onclick="loadGithubTree()">
+                <span class="action-icon"><i data-lucide="folder-tree"></i></span>
+                <strong>Browse source files</strong>
+                <small>Explore the locally cached repository and open files.</small>
+              </button>
+              <button class="action-card" type="button" onclick="loadGithubArchitectureMap()">
+                <span class="action-icon"><i data-lucide="network"></i></span>
+                <strong>Architecture map</strong>
+                <small>Discover routes, services, data access, tests, and entry points.</small>
+              </button>
+              <button class="action-card" type="button" onclick="loadGithubSystemDesign()">
+                <span class="action-icon"><i data-lucide="blocks"></i></span>
+                <strong>System design</strong>
+                <small>Generate a structural design narrative and risk review.</small>
+              </button>
+              <button class="action-card" type="button" onclick="loadGithubOnboardingGuide()">
+                <span class="action-icon"><i data-lucide="milestone"></i></span>
+                <strong>Onboarding guide</strong>
+                <small>Build an ordered learning path through the repository.</small>
+              </button>
+              <button class="action-card" type="button" onclick="loadGithubDependencyInsights()">
+                <span class="action-icon"><i data-lucide="package-search"></i></span>
+                <strong>Dependency insights</strong>
+                <small>Inspect package managers, libraries, and infrastructure files.</small>
+              </button>
+            </div>
+          </section>
+
+          <section class="github-operations-grid reveal">
+            <article class="surface-card">
+              <div class="card-header">
+                <div>
+                  <span class="section-kicker">Collaboration intelligence</span>
+                  <h3>Pull requests, issues, and ownership</h3>
+                </div>
+              </div>
 
               <label for="prNumber">Pull request number</label>
-              <input id="prNumber" type="number" placeholder="123" />
-            </section>
+              <input id="prNumber" type="number" min="1" placeholder="Example: 123" />
 
-            <section class="product-panel">
-              <div class="panel-head">
+              <div class="compact-action-grid two-column-actions">
+                <button class="compact-action" type="button" onclick="loadGithubPRDashboard()">
+                  <i data-lucide="git-pull-request"></i><span><strong>PR dashboard</strong><small>Open and merged pull requests</small></span>
+                </button>
+                <button class="compact-action" type="button" onclick="analyzeGithubPR()">
+                  <i data-lucide="scan-line"></i><span><strong>Analyze PR</strong><small>AI review of a specific pull request</small></span>
+                </button>
+                <button class="compact-action" type="button" onclick="loadIssueDashboard()">
+                  <i data-lucide="circle-dot-dashed"></i><span><strong>Issue dashboard</strong><small>Issue activity and risk signals</small></span>
+                </button>
+                <button class="compact-action" type="button" onclick="loadContributorMap()">
+                  <i data-lucide="users"></i><span><strong>Ownership map</strong><small>Contributor and file ownership</small></span>
+                </button>
+              </div>
+            </article>
+
+            <article class="surface-card">
+              <div class="card-header">
                 <div>
-                  <div class="panel-kicker">Core GitHub actions</div>
-                  <h3>Repository intelligence</h3>
+                  <span class="section-kicker">Quality and delivery</span>
+                  <h3>Engineering health</h3>
                 </div>
               </div>
 
-              <div class="action-grid">
-                <button onclick="summarizeGithub()">Summarize</button>
-                <button onclick="indexGithub()">Index</button>
-                <button onclick="askGithub()">Ask GitHub</button>
-                <button onclick="askCopilotGithub()">Copilot GitHub</button>
-                <button onclick="loadGithubTree()">Load Files</button>
-                <button onclick="refreshSelectedRepo()">Refresh Repo</button>
-                <button onclick="loadGithubArchitectureMap()">Architecture</button>
-                <button onclick="loadGithubOnboardingGuide()">Onboarding</button>
+              <div class="compact-action-grid two-column-actions">
+                <button class="compact-action" type="button" onclick="loadGithubTestCoverage()">
+                  <i data-lucide="test-tube-2"></i><span><strong>Testing health</strong><small>Coverage heuristics and risky files</small></span>
+                </button>
+                <button class="compact-action" type="button" onclick="loadGithubDeploymentReadiness()">
+                  <i data-lucide="rocket"></i><span><strong>Production readiness</strong><small>Deployment and configuration signals</small></span>
+                </button>
+                <button class="compact-action" type="button" onclick="loadReleaseReadiness()">
+                  <i data-lucide="shield-check"></i><span><strong>Release readiness</strong><small>Repository release health</small></span>
+                </button>
+                <button class="compact-action" type="button" onclick="exportGithubReport()">
+                  <i data-lucide="file-down"></i><span><strong>Export report</strong><small>Save engineering findings</small></span>
+                </button>
+                <button class="compact-action" type="button" onclick="createGithubPortfolioShare()">
+                  <i data-lucide="share-2"></i><span><strong>Portfolio share</strong><small>Create a polished HTML snapshot</small></span>
+                </button>
+                <button class="compact-action" type="button" onclick="askGithub()">
+                  <i data-lucide="message-square-code"></i><span><strong>Ask with RAG</strong><small>Answer using indexed source context</small></span>
+                </button>
               </div>
-            </section>
-          </div>
+            </article>
+          </section>
+        </section>
 
-          <aside class="task-side">
-            <section class="product-panel accent-panel">
-              <div class="panel-head">
+        <section class="page" data-page="compare">
+          <header class="page-header reveal">
+            <div>
+              <span class="section-kicker">Repository comparison</span>
+              <h1>Compare two codebases</h1>
+              <p>Identify differences in technology, structure, architecture, modules, testing, and engineering maturity.</p>
+            </div>
+            <span class="page-badge"><i data-lucide="git-compare-arrows"></i> Side-by-side analysis</span>
+          </header>
+
+          <section class="compare-layout reveal">
+            <article class="compare-card">
+              <div class="compare-card-header">
+                <span class="compare-source-icon"><i data-lucide="laptop"></i></span>
+                <div><span class="section-kicker">Local comparison</span><h2>Local repositories</h2></div>
+              </div>
+
+              <label for="compareRepoPathA">Repository A</label>
+              <input id="compareRepoPathA" type="text" placeholder="/Users/yourname/projects/repository-a" />
+
+              <label for="compareRepoPathB">Repository B</label>
+              <input id="compareRepoPathB" type="text" placeholder="/Users/yourname/projects/repository-b" />
+
+              <div class="compare-actions">
+                <button class="button button-primary" type="button" onclick="compareLocalRepos()"><i data-lucide="columns-2"></i> Compare repos</button>
+                <button class="button button-secondary" type="button" onclick="diffLocalArchitectures()"><i data-lucide="network"></i> Architecture diff</button>
+              </div>
+            </article>
+
+            <article class="compare-card">
+              <div class="compare-card-header">
+                <span class="compare-source-icon"><i data-lucide="github"></i></span>
+                <div><span class="section-kicker">GitHub comparison</span><h2>GitHub repositories</h2></div>
+              </div>
+
+              <label for="compareRepoUrlA">Repository A URL</label>
+              <input id="compareRepoUrlA" type="url" placeholder="https://github.com/owner/repository-a" />
+
+              <label for="compareRepoUrlB">Repository B URL</label>
+              <input id="compareRepoUrlB" type="url" placeholder="https://github.com/owner/repository-b" />
+
+              <div class="compare-actions">
+                <button class="button button-primary" type="button" onclick="compareGithubRepos()"><i data-lucide="columns-2"></i> Compare repos</button>
+                <button class="button button-secondary" type="button" onclick="diffGithubArchitectures()"><i data-lucide="network"></i> Architecture diff</button>
+              </div>
+            </article>
+          </section>
+        </section>
+
+        <section class="page" data-page="workspace">
+          <header class="page-header reveal">
+            <div>
+              <span class="section-kicker">AI workspace</span>
+              <h1>Explore results and source context</h1>
+              <p>Review analysis output, navigate the repository tree, and inspect the exact source files behind your findings.</p>
+            </div>
+            <span class="page-badge"><i data-lucide="sparkles"></i> Context-aware workspace</span>
+          </header>
+
+          <section class="workspace-grid reveal">
+            <article class="workspace-panel results-panel">
+              <div class="workspace-panel-header">
                 <div>
-                  <div class="panel-kicker">Advanced outputs</div>
-                  <h3>PRs, issues, health, reports</h3>
+                  <span class="section-kicker">Analysis output</span>
+                  <h2>Results</h2>
                 </div>
+                <span class="workspace-status"><span></span> Live output</span>
               </div>
-
-              <div class="action-grid compact">
-                <button onclick="exportGithubReport()">Export Report</button>
-                <button onclick="createGithubPortfolioShare()">Portfolio Share</button>
-                <button onclick="loadGithubDependencyInsights()">Dependencies</button>
-                <button onclick="loadGithubSystemDesign()">System Design</button>
-                <button onclick="loadGithubTestCoverage()">Test Heuristics</button>
-                <button onclick="loadGithubDeploymentReadiness()">Deployment</button>
-                <button onclick="loadGithubPRDashboard()">PR Dashboard</button>
-                <button onclick="analyzeGithubPR()">Analyze PR</button>
-                <button onclick="loadReleaseReadiness()">Release Health</button>
-                <button onclick="loadIssueDashboard()">Issue Dashboard</button>
-                <button onclick="loadContributorMap()">Ownership Map</button>
-              </div>
-            </section>
-          </aside>
-        </div>
-      </section>
-
-      <section class="page" data-page="compare">
-        <div class="page-header">
-          <div>
-            <div class="section-kicker">Comparison workspace</div>
-            <h2>Compare repositories and diff architecture</h2>
-          </div>
-          <p class="page-helper">Run structured comparisons for local paths or GitHub repositories with a cleaner workflow.</p>
-        </div>
-
-        <div class="compare-grid">
-          <section class="product-panel">
-            <div class="panel-head">
-              <div>
-                <div class="panel-kicker">Local compare</div>
-                <h3>Compare local repositories</h3>
-              </div>
-            </div>
-
-            <label for="compareRepoPathA">Local repo A</label>
-            <input id="compareRepoPathA" type="text" placeholder="/Users/anishbellamkonda/codegraph_ai" />
-
-            <label for="compareRepoPathB">Local repo B</label>
-            <input id="compareRepoPathB" type="text" placeholder="/Users/anishbellamkonda/another_repo" />
-
-            <div class="action-grid compact">
-              <button onclick="compareLocalRepos()">Compare Local</button>
-              <button onclick="diffLocalArchitectures()">Architecture Diff</button>
-            </div>
-          </section>
-
-          <section class="product-panel">
-            <div class="panel-head">
-              <div>
-                <div class="panel-kicker">GitHub compare</div>
-                <h3>Compare GitHub repositories</h3>
-              </div>
-            </div>
-
-            <label for="compareRepoUrlA">GitHub repo A</label>
-            <input id="compareRepoUrlA" type="text" placeholder="https://github.com/fastapi/fastapi" />
-
-            <label for="compareRepoUrlB">GitHub repo B</label>
-            <input id="compareRepoUrlB" type="text" placeholder="https://github.com/encode/starlette" />
-
-            <div class="action-grid compact">
-              <button onclick="compareGithubRepos()">Compare GitHub</button>
-              <button onclick="diffGithubArchitectures()">Architecture Diff</button>
-            </div>
-          </section>
-        </div>
-      </section>
-
-      <section class="page" data-page="ops">
-        <div class="page-header">
-          <div>
-            <div class="section-kicker">Operations</div>
-            <h2>Watch mode, history, and workspace management</h2>
-          </div>
-          <p class="page-helper">Track engineering thresholds, monitor recent activity, and manage team-level visibility.</p>
-        </div>
-
-        <div class="compare-grid">
-          <section class="product-panel">
-            <div class="panel-head">
-              <div>
-                <div class="panel-kicker">Watch mode</div>
-                <h3>Track engineering thresholds</h3>
-              </div>
-            </div>
-
-            <div class="helper-line">Uses the repo path or GitHub URL already entered in the Local or GitHub pages.</div>
-
-            <label for="watchName">Watch name</label>
-            <input id="watchName" type="text" placeholder="My repo watch" />
-
-            <div class="triple-grid">
-              <div>
-                <label for="watchMinDeployment">Min deployment score</label>
-                <input id="watchMinDeployment" type="number" value="60" />
-              </div>
-              <div>
-                <label for="watchMinCoverage">Min test coverage %</label>
-                <input id="watchMinCoverage" type="number" value="40" />
-              </div>
-              <div>
-                <label for="watchMaxRiskyUntested">Max risky untested</label>
-                <input id="watchMaxRiskyUntested" type="number" value="10" />
-              </div>
-            </div>
-
-            <div class="action-grid compact">
-              <button onclick="createLocalWatch()">Create Local Watch</button>
-              <button onclick="createGithubWatch()">Create GitHub Watch</button>
-              <button onclick="checkWatches()">Check Watches</button>
-              <button onclick="loadWatches()">Reload Watches</button>
-              <button class="danger" onclick="clearAllWatches()">Clear All Watches</button>
-            </div>
-
-            <div id="watchPanel" class="mini-panel muted">Saved watches will appear here...</div>
-          </section>
-
-          <section class="product-panel">
-            <div class="panel-head">
-              <div>
-                <div class="panel-kicker">History and dashboards</div>
-                <h3>Workspace activity</h3>
-              </div>
-            </div>
-
-            <div class="action-grid compact">
-              <button onclick="loadHistory()">Reload History</button>
-              <button onclick="loadTeamDashboard()">Team Dashboard</button>
-              <button class="danger" onclick="clearHistoryPanel()">Clear History</button>
-            </div>
-
-            <div id="historyPanel" class="mini-panel muted">History will appear here...</div>
-          </section>
-        </div>
-      </section>
-
-      <section class="page" data-page="workspace">
-        <div class="page-header">
-          <div>
-            <div class="section-kicker">Workspace</div>
-            <h2>Results, repository browser, and source viewer</h2>
-          </div>
-          <p class="page-helper">This is the main product surface for outputs, file browsing, and source inspection.</p>
-        </div>
-
-        <div class="workspace-layout">
-          <section class="workspace-main">
-            <section class="product-panel workspace-panel">
-              <div class="panel-head">
-                <div>
-                  <div class="panel-kicker">Results workspace</div>
-                  <h3>Analysis output</h3>
-                </div>
-              </div>
-
               <div id="renderedOutput" class="rendered-output">
                 <div class="empty-state">
-                  Run any analysis from Local, GitHub, Compare, or Ops and results will appear here.
+                  <div class="empty-icon"><i data-lucide="sparkles"></i></div>
+                  <strong>No analysis selected</strong>
+                  <p>Run a workflow from Local, GitHub, Compare, or Monitoring to see its output here.</p>
                 </div>
               </div>
-            </section>
+            </article>
+
+            <aside class="workspace-explorer">
+              <article class="workspace-panel explorer-panel">
+                <div class="workspace-panel-header">
+                  <div><span class="section-kicker">Repository browser</span><h2>Files</h2></div>
+                </div>
+                <div id="fileTree" class="file-tree-shell">
+                  <div class="empty-state compact-empty">
+                    <div class="empty-icon"><i data-lucide="folder-tree"></i></div>
+                    <strong>No repository loaded</strong>
+                    <p>Load files from a local or GitHub repository.</p>
+                  </div>
+                </div>
+              </article>
+
+              <article class="workspace-panel viewer-panel">
+                <div class="workspace-panel-header">
+                  <div><span class="section-kicker">Source context</span><h2>Code viewer</h2></div>
+                </div>
+                <div id="fileViewer" class="file-viewer-shell">
+                  <div class="empty-state compact-empty">
+                    <div class="empty-icon"><i data-lucide="file-code-2"></i></div>
+                    <strong>No file selected</strong>
+                    <p>Select a file from the repository browser.</p>
+                  </div>
+                </div>
+              </article>
+            </aside>
           </section>
+        </section>
 
-          <aside class="workspace-side">
-            <section class="product-panel workspace-panel">
-              <div class="panel-head">
+        <section class="page" data-page="ops">
+          <header class="page-header reveal">
+            <div>
+              <span class="section-kicker">Monitoring and operations</span>
+              <h1>Track repository health over time</h1>
+              <p>Create engineering watch rules, review activity history, and inspect health across saved repositories.</p>
+            </div>
+            <span class="page-badge"><i data-lucide="activity"></i> Workspace monitoring</span>
+          </header>
+
+          <section class="operations-grid reveal">
+            <article class="surface-card">
+              <div class="card-header">
+                <div><span class="section-kicker">Watch mode</span><h3>Engineering thresholds</h3></div>
+                <span class="card-badge"><i data-lucide="radar"></i> Monitor</span>
+              </div>
+
+              <p class="card-description">Create a reusable health check using the local path or GitHub URL entered in the repository pages.</p>
+
+              <label for="watchName">Watch name</label>
+              <input id="watchName" type="text" placeholder="Production readiness watch" />
+
+              <div class="threshold-grid">
                 <div>
-                  <div class="panel-kicker">Repository browser</div>
-                  <h3>File tree</h3>
+                  <label for="watchMinDeployment">Minimum deployment score</label>
+                  <input id="watchMinDeployment" type="number" min="0" max="100" value="60" />
+                </div>
+                <div>
+                  <label for="watchMinCoverage">Minimum test coverage %</label>
+                  <input id="watchMinCoverage" type="number" min="0" max="100" value="40" />
+                </div>
+                <div>
+                  <label for="watchMaxRiskyUntested">Maximum risky untested files</label>
+                  <input id="watchMaxRiskyUntested" type="number" min="0" value="10" />
                 </div>
               </div>
 
-              <div id="fileTree" class="file-tree-shell">
-                <div class="empty-state">Load a repository to browse files.</div>
-              </div>
-            </section>
-
-            <section class="product-panel workspace-panel">
-              <div class="panel-head">
-                <div>
-                  <div class="panel-kicker">Source view</div>
-                  <h3>Code viewer</h3>
-                </div>
+              <div class="operations-actions">
+                <button class="button button-secondary" type="button" onclick="createLocalWatch()"><i data-lucide="laptop"></i> Watch local</button>
+                <button class="button button-secondary" type="button" onclick="createGithubWatch()"><i data-lucide="github"></i> Watch GitHub</button>
+                <button class="button button-primary" type="button" onclick="checkWatches()"><i data-lucide="play"></i> Run checks</button>
+                <button class="button button-ghost" type="button" onclick="loadWatches()"><i data-lucide="refresh-cw"></i> Reload</button>
+                <button class="button button-danger" type="button" onclick="clearAllWatches()"><i data-lucide="trash-2"></i> Clear</button>
               </div>
 
-              <div id="fileViewer" class="file-viewer-shell">
-                <div class="empty-state">Choose a file to preview code here.</div>
+              <div id="watchPanel" class="embedded-panel muted">Saved watches will appear here.</div>
+            </article>
+
+            <article class="surface-card">
+              <div class="card-header">
+                <div><span class="section-kicker">Workspace activity</span><h3>History and team dashboard</h3></div>
+                <span class="card-badge"><i data-lucide="history"></i> Activity</span>
               </div>
-            </section>
-          </aside>
-        </div>
-      </section>
-    </main>
+
+              <p class="card-description">Review recent analyses and generate a workspace-level overview across saved repositories.</p>
+
+              <div class="operations-actions">
+                <button class="button button-secondary" type="button" onclick="loadHistory()"><i data-lucide="history"></i> Reload history</button>
+                <button class="button button-primary" type="button" onclick="loadTeamDashboard()"><i data-lucide="layout-dashboard"></i> Team dashboard</button>
+                <button class="button button-danger" type="button" onclick="clearHistoryPanel()"><i data-lucide="trash-2"></i> Clear history</button>
+              </div>
+
+              <div id="historyPanel" class="embedded-panel muted">Workspace history will appear here.</div>
+            </article>
+          </section>
+        </section>
+      </main>
+    </div>
   </div>
-
-  <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.9.0/highlight.min.js"></script>
 
   <script src="/static/app.js?v=12"></script>
   <script src="/static/pr_dashboard.js?v=3"></script>
@@ -465,6 +744,7 @@
   <script src="/static/portfolio_share.js?v=1"></script>
   <script src="/static/watch_mode.js?v=1"></script>
   <script src="/static/team_dashboard.js?v=1"></script>
-  <script src="/static/ui_product.js?v=2"></script>
+  <script src="/static/ui_product.js?v=1001"></script>
 </body>
 </html>
+
